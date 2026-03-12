@@ -1,4 +1,4 @@
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 
 function Navbar() {
     return (
@@ -9,11 +9,14 @@ function Navbar() {
             marginBottom: '20px',
             display: 'flex',
             gap: '20px',
-            borderRadius: '8px'
+            borderRadius: '8px',
+            flexWrap: 'wrap'
         }}>
             <Link to="/" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>🏠 Home</Link>
-            <Link to="/inventory" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>📚 View Inventory</Link>
-            <Link to="/add" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>➕ Add New Book</Link>
+            <Link to="/inventory" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>📚 Books</Link>
+            <Link to="/add" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>➕ Add Book</Link>
+            <Link to="/lipsticks" style={{ color: '#ff99cc', textDecoration: 'none', fontWeight: 'bold' }}>💄 Lipsticks</Link>
+            <Link to="/add-lipstick" style={{ color: '#ff99cc', textDecoration: 'none', fontWeight: 'bold' }}>➕ Add Lipstick</Link>
         </nav>
     );
 }
