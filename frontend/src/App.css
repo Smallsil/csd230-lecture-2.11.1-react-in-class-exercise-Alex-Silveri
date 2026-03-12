@@ -40,3 +40,28 @@
 .read-the-docs {
   color: #888;
 }
+/* Ensure all text in book rows is dark and visible */
+.book-row h3 {
+  color: #1a1a1a !important;
+  font-size: 1.2rem;
+}
+
+.book-row p {
+  color: #333333 !important;
+}
+
+.book-row strong {
+  color: #1a1a1a !important;
+}
+
+/* Better contrast for the edit button */
+.book-actions button:first-child {
+  color: #1a1a1a !important;
+  background-color: #ffc107 !important;
+}
+
+/* Better contrast for the delete button */
+.book-actions button:last-child {
+  color: #ffffff !important;
+  background-color: #dc3545 !important;
+}
