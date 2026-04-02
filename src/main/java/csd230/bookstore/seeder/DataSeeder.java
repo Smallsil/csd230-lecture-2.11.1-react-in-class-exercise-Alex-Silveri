@@ -3,11 +3,15 @@ package csd230.bookstore.seeder;
 import csd230.bookstore.entities.BookEntity;
 import csd230.bookstore.entities.LipstickEntity;
 import csd230.bookstore.entities.MagazineEntity;
+import csd230.bookstore.entities.UserEntity;
 import csd230.bookstore.repositories.BookRepository;
 import csd230.bookstore.repositories.LipstickRepository;
 import csd230.bookstore.repositories.MagazineRepository;
+import csd230.bookstore.repositories.UserEntityRepository;
 import net.datafaker.Faker;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -20,15 +24,21 @@ public class DataSeeder implements CommandLineRunner {
     private final BookRepository bookRepository;
     private final MagazineRepository magazineRepository;
     private final LipstickRepository lipstickRepository;
+    private final UserEntityRepository userRepository;  // Changed to UserEntityRepository
     private final Faker faker;
+    private final PasswordEncoder passwordEncoder;
 
+    // Updated constructor
     public DataSeeder(BookRepository bookRepository,
                       MagazineRepository magazineRepository,
-                      LipstickRepository lipstickRepository) {
+                      LipstickRepository lipstickRepository,
+                      UserEntityRepository userRepository) {  // Changed to UserEntityRepository
         this.bookRepository = bookRepository;
         this.magazineRepository = magazineRepository;
         this.lipstickRepository = lipstickRepository;
+        this.userRepository = userRepository;
         this.faker = new Faker();
+        this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
     @Override
@@ -36,7 +46,13 @@ public class DataSeeder implements CommandLineRunner {
         System.out.println("=== Starting Data Seeder ===");
         System.out.println("Current counts - Books: " + bookRepository.count() +
                 ", Magazines: " + magazineRepository.count() +
-                ", Lipsticks: " + lipstickRepository.count());
+                ", Lipsticks: " + lipstickRepository.count() +
+                ", Users: " + userRepository.count());
+
+        // Seed users FIRST (if no users exist)
+        if (userRepository.count() == 0) {
+            seedUsers();
+        }
 
         // Seed if ANY of the repositories are empty
         if (bookRepository.count() == 0) {
@@ -52,7 +68,28 @@ public class DataSeeder implements CommandLineRunner {
         System.out.println("=== Data Seeding Complete ===");
         System.out.println("Final counts - Books: " + bookRepository.count() +
                 ", Magazines: " + magazineRepository.count() +
-                ", Lipsticks: " + lipstickRepository.count());
+                ", Lipsticks: " + lipstickRepository.count() +
+                ", Users: " + userRepository.count());
+    }
+
+    private void seedUsers() {
+        System.out.println("Seeding Users...");
+
+        // Create Admin User
+        UserEntity admin = new UserEntity();
+        admin.setUsername("admin");
+        admin.setPassword(passwordEncoder.encode("admin123"));
+        admin.setRole("ADMIN");  // Just "ADMIN", not "ROLE_ADMIN" because CustomUserDetailsService adds ROLE_
+        userRepository.save(admin);
+
+        // Create Regular User
+        UserEntity user = new UserEntity();
+        user.setUsername("user");
+        user.setPassword(passwordEncoder.encode("user123"));
+        user.setRole("USER");
+        userRepository.save(user);
+
+        System.out.println("✅ Created admin/admin123 and user/user123");
     }
 
     private void seedBooks() {
