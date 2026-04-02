@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router';
-import Navbar from './NavBar';
+import Navbar from './Navbar';
 import Home from './Home';
-import Book from './Book';
+import Book from './book';
 import BookForm from './BookForm';
 import Magazine from './Magazine';
 import MagazineForm from './MagazineForm';
