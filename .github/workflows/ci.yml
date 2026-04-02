@@ -1,15 +1,5 @@
 name: Java CI/CD Pipeline
 
-deploy:
-  name: Deploy to Render
-  needs: test  # <--- This is the magic line!
-  if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
-  runs-on: ubuntu-latest
-  steps:
-    - name: Trigger Render Deploy Hook
-      run: |
-        curl -f ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
-
 on:
   push:
     branches: [ "main", "master" ]
@@ -31,9 +21,15 @@ jobs:
           cache: maven
 
       - name: Build with Maven
-        # This will run the React build (via Docker or Maven if plugin configured)
-        # and execute ApplicationTests.java
         run: mvn clean verify
 
-  # We will add the 'deploy' job here in Phase 5
+  deploy:
+    name: Deploy to Render
+    needs: test
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Render Deploy Hook
+        run: |
+          curl -f ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
 
