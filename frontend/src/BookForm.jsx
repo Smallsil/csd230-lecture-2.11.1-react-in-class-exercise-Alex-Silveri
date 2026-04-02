@@ -1,32 +1,29 @@
 import { useState } from 'react';
+import api from './api/axiosConfig';
 
 function BookForm({ onBookAdded }) {
-    // 1. Define state for each input field
     const [title, setTitle] = useState('');
     const [author, setAuthor] = useState('');
     const [price, setPrice] = useState(0);
     const [copies, setCopies] = useState(1);
 
-    // 2. The Submit Handler
     const handleSubmit = (e) => {
-        e.preventDefault(); // Stop the page from reloading!
+        e.preventDefault();
 
         const newBook = { title, author, price, copies };
 
-        // 3. POST to Spring Boot
-        fetch('/api/books', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(newBook),
-        })
-            .then(response => response.json())
-            .then(savedBook => {
+        api.post('/api/books', newBook)
+            .then(response => {
                 alert("Book Saved!");
-                onBookAdded(savedBook); // Tell the parent to update the list
-                // 4. Clear the form
+                onBookAdded(response.data);
                 setTitle('');
                 setAuthor('');
                 setPrice(0);
+                setCopies(1);
+            })
+            .catch(err => {
+                console.error("Error saving book:", err);
+                alert("Failed to save book");
             });
     };
 

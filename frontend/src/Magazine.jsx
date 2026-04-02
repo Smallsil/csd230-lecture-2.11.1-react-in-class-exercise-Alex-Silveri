@@ -1,40 +1,45 @@
 import { useState } from 'react';
-import { useAuth } from "./provider/authProvider.jsx";
+import { useAuth } from './provider/authProvider';
 
-function Lipstick({ id, title, price, finishType, skinType, copies, onDelete, onUpdate, onAddToCart }) {
+function Magazine({ id, title, price, copies, orderQty, currentIssue, onDelete, onUpdate, onAddToCart }) {
+    const { isAdmin } = useAuth();
+
+    const formatIssueDate = (issue) => {
+        if (!issue) return '';
+        return typeof issue === 'string' ? issue.slice(0, 16) : '';
+    };
+
     const [isEditing, setIsEditing] = useState(false);
     const [tempTitle, setTempTitle] = useState(title);
     const [tempPrice, setTempPrice] = useState(price);
-    const [tempFinishType, setTempFinishType] = useState(finishType);
-    const [tempSkinType, setTempSkinType] = useState(skinType);
-    const [tempCopies, setTempCopies] = useState(copies);
-    const { isAdmin } = useAuth();
+    const [tempOrder, setTempOrder] = useState(orderQty);
+    const [tempIssue, setTempIssue] = useState(formatIssueDate(currentIssue));
 
     const handleSave = () => {
-        const updatedLipstick = {
+        const updatedData = {
             id,
             title: tempTitle,
             price: parseFloat(tempPrice),
-            finishType: tempFinishType,
-            skinType: tempSkinType,
-            copies: parseInt(tempCopies) || 1
+            copies: copies,
+            orderQty: parseInt(tempOrder),
+            currentIssue: tempIssue.length === 16 ? tempIssue + ":00" : tempIssue
         };
-        onUpdate(id, updatedLipstick);
+        onUpdate(id, updatedData);
         setIsEditing(false);
     };
 
     // EDIT MODE
     if (isEditing) {
         return (
-            <div className="lipstick-row editing" style={{
-                border: '2px solid #ff69b4',
+            <div className="magazine-row editing" style={{
+                border: '2px solid #17a2b8',
                 margin: '10px 0',
                 padding: '15px',
                 borderRadius: '8px',
                 display: 'flex',
                 flexWrap: 'wrap',
                 gap: '10px',
-                backgroundColor: '#fff0f5'
+                backgroundColor: '#e3f2fd'
             }}>
                 <input
                     type="text"
@@ -52,25 +57,17 @@ function Lipstick({ id, title, price, finishType, skinType, copies, onDelete, on
                     step="0.01"
                 />
                 <input
-                    type="text"
-                    value={tempFinishType}
-                    onChange={(e) => setTempFinishType(e.target.value)}
-                    style={{ flex: 1, padding: '5px' }}
-                    placeholder="Finish Type"
-                />
-                <input
-                    type="text"
-                    value={tempSkinType}
-                    onChange={(e) => setTempSkinType(e.target.value)}
-                    style={{ flex: 1, padding: '5px' }}
-                    placeholder="Skin Type"
-                />
-                <input
                     type="number"
-                    value={tempCopies}
-                    onChange={(e) => setTempCopies(e.target.value)}
-                    style={{ width: '60px', padding: '5px' }}
-                    placeholder="Copies"
+                    value={tempOrder}
+                    onChange={(e) => setTempOrder(e.target.value)}
+                    style={{ width: '100px', padding: '5px' }}
+                    placeholder="Order Qty"
+                />
+                <input
+                    type="datetime-local"
+                    value={tempIssue}
+                    onChange={(e) => setTempIssue(e.target.value)}
+                    style={{ width: '200px', padding: '5px' }}
                 />
                 <button onClick={handleSave} style={{
                     backgroundColor: '#28a745',
@@ -98,27 +95,26 @@ function Lipstick({ id, title, price, finishType, skinType, copies, onDelete, on
 
     // VIEW MODE
     return (
-        <div className="lipstick-row" style={{
-            border: '1px solid #ff69b4',
+        <div className="magazine-row" style={{
+            border: '1px solid #17a2b8',
             margin: '10px 0',
             padding: '15px',
             borderRadius: '8px',
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            backgroundColor: '#fff9f9'
+            backgroundColor: '#f0f8ff'
         }}>
-            <div className="lipstick-info" style={{ textAlign: 'left' }}>
-                <h3 style={{ margin: '0 0 5px 0', color: '#333' }}>💄 {title}</h3>
+            <div className="magazine-info" style={{ textAlign: 'left' }}>
+                <h3 style={{ margin: '0 0 5px 0', color: '#333' }}>📰 {title}</h3>
                 <p style={{ margin: '3px 0', color: '#555' }}>
-                    <strong>Price:</strong> ${price?.toFixed(2)} |
-                    <strong> Finish:</strong> {finishType} |
-                    <strong> Skin:</strong> {skinType} |
-                    <strong> Copies:</strong> {copies}
+                    <strong>Price:</strong> ${Number(price).toFixed(2)} |
+                    <strong> Order Qty:</strong> {orderQty} |
+                    <strong> Issue:</strong> {formatIssueDate(currentIssue).replace('T', ' ')}
                 </p>
             </div>
 
-            <div className="lipstick-actions">
+            <div className="magazine-actions">
                 <button
                     onClick={() => onAddToCart(id)}
                     style={{
@@ -172,4 +168,4 @@ function Lipstick({ id, title, price, finishType, skinType, copies, onDelete, on
     );
 }
 
-export default Lipstick;
+export default Magazine;

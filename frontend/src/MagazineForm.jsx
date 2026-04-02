@@ -1,13 +1,13 @@
 import { useState } from 'react';
-import { useAuth } from "./provider/authProvider.jsx";
-import api from "./api/axiosConfig.js";
+import { useAuth } from './provider/authProvider';
+import api from './api/axiosConfig';
 
-function LipstickForm({ onLipstickAdded }) {
+function MagazineForm({ onMagazineAdded }) {
     const [title, setTitle] = useState('');
     const [price, setPrice] = useState(0);
-    const [finishType, setFinishType] = useState('');
-    const [skinType, setSkinType] = useState('');
     const [copies, setCopies] = useState(1);
+    const [orderQty, setOrderQty] = useState(1);
+    const [currentIssue, setCurrentIssue] = useState('');
     const { isAdmin } = useAuth();
 
     if (!isAdmin) {
@@ -17,42 +17,40 @@ function LipstickForm({ onLipstickAdded }) {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        const newLipstick = {
+        const newMagazine = {
             title,
             price: parseFloat(price),
-            finishType,
-            skinType,
-            copies: parseInt(copies)
+            copies: parseInt(copies),
+            orderQty: parseInt(orderQty),
+            currentIssue: currentIssue ? currentIssue + ":00" : null
         };
 
-        api.post("/api/lipsticks", newLipstick)
+        api.post('/api/magazines', newMagazine)
             .then(response => {
-                console.log("Lipstick saved:", response.data);
-                alert("Lipstick Saved!");
-                onLipstickAdded(response.data);
+                alert("Magazine Saved!");
+                onMagazineAdded(response.data);
                 // Clear the form
                 setTitle('');
                 setPrice(0);
-                setFinishType('');
-                setSkinType('');
                 setCopies(1);
+                setOrderQty(1);
+                setCurrentIssue('');
             })
             .catch(err => {
-                console.error("Error saving lipstick:", err);
-                console.error("Error response:", err.response?.data);
-                alert("Failed to save lipstick: " + (err.response?.data?.message || err.message));
+                console.error("Error saving magazine:", err);
+                alert("Failed to save magazine");
             });
     };
 
     return (
         <form onSubmit={handleSubmit} style={{
-            border: '2px solid #ff69b4',
+            border: '2px solid #17a2b8',
             padding: '20px',
             marginBottom: '20px',
             borderRadius: '8px',
-            backgroundColor: '#fff0f5'
+            backgroundColor: '#e3f2fd'
         }}>
-            <h3 style={{ color: '#d43f7a', marginTop: 0 }}>Add New Lipstick</h3>
+            <h3 style={{ color: '#0b5e7e', marginTop: 0 }}>📰 Add New Magazine</h3>
 
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
                 <input
@@ -73,22 +71,6 @@ function LipstickForm({ onLipstickAdded }) {
                     style={{ width: '100px', padding: '8px' }}
                 />
                 <input
-                    type="text"
-                    placeholder="Finish Type (matte, gloss, satin)"
-                    value={finishType}
-                    onChange={(e) => setFinishType(e.target.value)}
-                    required
-                    style={{ flex: 1, padding: '8px' }}
-                />
-                <input
-                    type="text"
-                    placeholder="Skin Type (dry, oily, combination)"
-                    value={skinType}
-                    onChange={(e) => setSkinType(e.target.value)}
-                    required
-                    style={{ flex: 1, padding: '8px' }}
-                />
-                <input
                     type="number"
                     placeholder="Copies"
                     value={copies}
@@ -97,8 +79,23 @@ function LipstickForm({ onLipstickAdded }) {
                     min="1"
                     style={{ width: '80px', padding: '8px' }}
                 />
+                <input
+                    type="number"
+                    placeholder="Order Quantity"
+                    value={orderQty}
+                    onChange={(e) => setOrderQty(e.target.value)}
+                    required
+                    min="1"
+                    style={{ width: '100px', padding: '8px' }}
+                />
+                <input
+                    type="datetime-local"
+                    value={currentIssue}
+                    onChange={(e) => setCurrentIssue(e.target.value)}
+                    style={{ width: '200px', padding: '8px' }}
+                />
                 <button type="submit" style={{
-                    backgroundColor: '#d43f7a',
+                    backgroundColor: '#17a2b8',
                     color: 'white',
                     border: 'none',
                     padding: '8px 16px',
@@ -106,11 +103,11 @@ function LipstickForm({ onLipstickAdded }) {
                     cursor: 'pointer',
                     fontWeight: 'bold'
                 }}>
-                    Save to Database
+                    Save Magazine
                 </button>
             </div>
         </form>
     );
 }
 
-export default LipstickForm;
+export default MagazineForm;

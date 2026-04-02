@@ -1,24 +1,27 @@
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
+import { useAuth } from './provider/authProvider';
 
-function Navbar() {
+function Navbar({ cartCount }) {
+    const { isAdmin } = useAuth();
+
     return (
-        <nav style={{
-            padding: '1rem',
-            backgroundColor: '#222',
-            color: 'white',
-            marginBottom: '20px',
-            display: 'flex',
-            gap: '20px',
-            borderRadius: '8px',
-            flexWrap: 'wrap'
-        }}>
-            <Link to="/" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>🏠 Home</Link>
-            <Link to="/inventory" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>📚 Books</Link>
-            <Link to="/add" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>➕ Add Book</Link>
-            <Link to="/lipsticks" style={{ color: '#ff99cc', textDecoration: 'none', fontWeight: 'bold' }}>💄 Lipsticks</Link>
-            <Link to="/add-lipstick" style={{ color: '#ff99cc', textDecoration: 'none', fontWeight: 'bold' }}>➕ Add Lipstick</Link>
+        <nav className="navbar">
+            <Link to="/">🏠 Home</Link>
+            <Link to="/inventory">📚 Books</Link>
+            <Link to="/magazines">📰 Magazines</Link>
+            <Link to="/lipsticks">💄 Lipsticks</Link>
+            <Link to="/cart">🛒 Cart ({cartCount})</Link>
+
+            {isAdmin && (
+                <>
+                    <Link to="/add">➕ Add Book</Link>
+                    <Link to="/add-magazine">➕ Add Magazine</Link>
+                    <Link to="/add-lipstick">➕ Add Lipstick</Link>
+                </>
+            )}
+
+            <Link to="/logout" style={{ color: "#ff4444", marginLeft: "auto" }}>🚪 Logout</Link>
         </nav>
     );
 }
-
 export default Navbar;
