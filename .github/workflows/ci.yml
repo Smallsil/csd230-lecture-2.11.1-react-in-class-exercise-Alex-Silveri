@@ -1,5 +1,15 @@
 name: Java CI/CD Pipeline
 
+deploy:
+  name: Deploy to Render
+  needs: test  # <--- This is the magic line!
+  if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+  runs-on: ubuntu-latest
+  steps:
+    - name: Trigger Render Deploy Hook
+      run: |
+        curl -f ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+
 on:
   push:
     branches: [ "main", "master" ]
