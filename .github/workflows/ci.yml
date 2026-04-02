@@ -30,7 +30,7 @@ jobs:
   deploy:
     name: Deploy to Render
     needs: test  # <--- This is the magic line!
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/Lecture_4'
     runs-on: ubuntu-latest
     steps:
       - name: Trigger Render Deploy Hook
