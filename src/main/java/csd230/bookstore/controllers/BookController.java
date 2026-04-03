@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
         import java.util.List;
 
 @RestController
-@RequestMapping("/api/books")
+@RequestMapping("/api/rest/books")
 @CrossOrigin(origins = "http://localhost:5173") // Allow Vite React App
 public class BookController {
 

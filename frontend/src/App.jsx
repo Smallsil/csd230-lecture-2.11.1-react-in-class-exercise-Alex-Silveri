@@ -36,10 +36,10 @@ function App() {
         const loadInitialData = async () => {
             try {
                 const [booksRes, magazinesRes, lipsticksRes, cartRes] = await Promise.all([
-                    api.get('/api/books'),
-                    api.get('/api/magazines'),
-                    api.get('/api/lipsticks'),
-                    api.get('/api/cart')
+                    api.get('/api/rest/books'),
+                    api.get('/api/rest/magazines'),
+                    api.get('/api/rest/lipsticks'),
+                    api.get('/api/rest/cart')
                 ]);
                 setBooks(booksRes.data);
                 setMagazines(magazinesRes.data);

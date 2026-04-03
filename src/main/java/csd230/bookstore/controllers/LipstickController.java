@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/lipsticks")
+@RequestMapping("/api/rest/lipsticks")
 @CrossOrigin(origins = "http://localhost:5173") // Allow Vite React App
 public class LipstickController {
 

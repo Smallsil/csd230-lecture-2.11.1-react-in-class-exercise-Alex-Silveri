@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/cart")
+@RequestMapping("/api/rest/cart")
 @CrossOrigin(origins = "http://localhost:5173")
 public class CartController {
 
