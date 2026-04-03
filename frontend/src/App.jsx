@@ -57,7 +57,7 @@ function App() {
     // Add to cart function
     const handleAddToCart = async (productId, productType) => {
         try {
-            const res = await api.post(`/api/cart/add/${productId}?type=${productType}`);
+            const res = await api.post(`/api/rest/cart/add/${productId}?type=${productType}`);
             setCartCount(res.data.products.length);
             alert("Added to cart!");
         } catch (err) {
@@ -74,7 +74,7 @@ function App() {
     const handleDeleteBook = async (id) => {
         if (!window.confirm("Delete this book?")) return;
         try {
-            await api.delete(`/api/books/${id}`);
+            await api.delete(`/api/rest/books/${id}`);
             setBooks(books.filter(b => b.id !== id));
             alert("Book deleted!");
         } catch (err) {
@@ -85,7 +85,7 @@ function App() {
 
     const handleUpdateBook = async (id, updatedData) => {
         try {
-            const res = await api.put(`/api/books/${id}`, updatedData);
+            const res = await api.put(`/api/rest/books/${id}`, updatedData);
             setBooks(books.map(b => (b.id === id ? res.data : b)));
             alert("Book updated!");
         } catch (err) {
@@ -102,7 +102,7 @@ function App() {
     const handleDeleteMagazine = async (id) => {
         if (!window.confirm("Delete this magazine?")) return;
         try {
-            await api.delete(`/api/magazines/${id}`);
+            await api.delete(`/api/rest/magazines/${id}`);
             setMagazines(magazines.filter(m => m.id !== id));
             alert("Magazine deleted!");
         } catch (err) {
@@ -113,7 +113,7 @@ function App() {
 
     const handleUpdateMagazine = async (id, updatedData) => {
         try {
-            const res = await api.put(`/api/magazines/${id}`, updatedData);
+            const res = await api.put(`/api/rest/magazines/${id}`, updatedData);
             setMagazines(magazines.map(m => (m.id === id ? res.data : m)));
             alert("Magazine updated!");
         } catch (err) {
@@ -130,7 +130,7 @@ function App() {
     const handleDeleteLipstick = async (id) => {
         if (!window.confirm("Delete this lipstick?")) return;
         try {
-            await api.delete(`/api/lipsticks/${id}`);
+            await api.delete(`/api/rest/lipsticks/${id}`);
             setLipsticks(lipsticks.filter(l => l.id !== id));
             alert("Lipstick deleted!");
         } catch (err) {
@@ -141,7 +141,7 @@ function App() {
 
     const handleUpdateLipstick = async (id, updatedData) => {
         try {
-            const res = await api.put(`/api/lipsticks/${id}`, updatedData);
+            const res = await api.put(`/api/rest/lipsticks/${id}`, updatedData);
             setLipsticks(lipsticks.map(l => (l.id === id ? res.data : l)));
             alert("Lipstick updated!");
         } catch (err) {

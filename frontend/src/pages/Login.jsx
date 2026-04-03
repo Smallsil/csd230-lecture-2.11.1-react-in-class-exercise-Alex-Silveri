@@ -23,7 +23,7 @@ const Login = () => {
         try {
             // 1. Call the Spring Boot AuthController
             // We pass { email, password } to match the LoginReq.java POJO
-            const res = await api.post("/auth/login", { email, password });
+            const res = await api.post("/api/rest/auth/login", { email, password });
 
             // 2. Save the JWT to context (which also updates localStorage)
             login(res.data.token);
