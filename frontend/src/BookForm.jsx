@@ -12,7 +12,7 @@ function BookForm({ onBookAdded }) {
 
         const newBook = { title, author, price, copies };
 
-        api.post('/api/books', newBook)
+        api.post('/api/rest/books', newBook)  // FIXED: Added /rest/
             .then(response => {
                 alert("Book Saved!");
                 onBookAdded(response.data);

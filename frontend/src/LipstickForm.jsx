@@ -25,7 +25,7 @@ function LipstickForm({ onLipstickAdded }) {
             copies: parseInt(copies)
         };
 
-        api.post("/api/lipsticks", newLipstick)
+        api.post('/api/rest/lipsticks', newLipstick)
             .then(response => {
                 console.log("Lipstick saved:", response.data);
                 alert("Lipstick Saved!");

@@ -56,16 +56,19 @@ function App() {
 
     // Add to cart function
     const handleAddToCart = async (productId, productType) => {
+        console.log("=== ADD TO CART ===");
+        console.log("Product ID:", productId);
+        console.log("Product Type:", productType);
+
         try {
             const res = await api.post(`/api/rest/cart/add/${productId}?type=${productType}`);
-            setCartCount(res.data.products.length);
-            alert("Added to cart!");
+            console.log("Response:", res.data);
+            setCartCount(res.data.count);
         } catch (err) {
             console.error("Cart error:", err);
-            alert("Error adding to cart");
+            console.error("Error response:", err.response?.data);
         }
     };
-
     // ========== BOOK CRUD ==========
     const handleAddBook = (newBook) => {
         setBooks([...books, newBook]);
@@ -113,11 +116,18 @@ function App() {
 
     const handleUpdateMagazine = async (id, updatedData) => {
         try {
+            console.log("Updating magazine ID:", id);
+            console.log("Data being sent:", JSON.stringify(updatedData, null, 2));
+
             const res = await api.put(`/api/rest/magazines/${id}`, updatedData);
+            console.log("Response:", res.data);
+
             setMagazines(magazines.map(m => (m.id === id ? res.data : m)));
             alert("Magazine updated!");
         } catch (err) {
             console.error("Error updating magazine:", err);
+            console.error("Error response data:", err.response?.data);
+            console.error("Error status:", err.response?.status);
             alert("Failed to update magazine");
         }
     };

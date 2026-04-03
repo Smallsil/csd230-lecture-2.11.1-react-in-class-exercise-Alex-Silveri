@@ -10,20 +10,22 @@ function Magazine({ id, title, price, copies, orderQty, currentIssue, onDelete, 
     };
 
     const [isEditing, setIsEditing] = useState(false);
-    const [tempTitle, setTempTitle] = useState(title);
-    const [tempPrice, setTempPrice] = useState(price);
-    const [tempOrder, setTempOrder] = useState(orderQty);
+    const [tempTitle, setTempTitle] = useState(title || '');
+    const [tempPrice, setTempPrice] = useState(price || 0);
+    const [tempCopies, setTempCopies] = useState(copies || 0);  // Ensure default is 0
+    const [tempOrder, setTempOrder] = useState(orderQty || 0);
     const [tempIssue, setTempIssue] = useState(formatIssueDate(currentIssue));
 
     const handleSave = () => {
         const updatedData = {
-            id,
+            id: id,
             title: tempTitle,
-            price: parseFloat(tempPrice),
-            copies: copies,
-            orderQty: parseInt(tempOrder),
-            currentIssue: tempIssue.length === 16 ? tempIssue + ":00" : tempIssue
+            price: parseFloat(tempPrice) || 0,
+            copies: Number(tempCopies) || 0,  // Force to number
+            orderQty: parseInt(tempOrder) || 0,
+            currentIssue: tempIssue && tempIssue.length === 16 ? tempIssue + ":00" : tempIssue
         };
+        console.log("Saving magazine with copies:", updatedData.copies);
         onUpdate(id, updatedData);
         setIsEditing(false);
     };
@@ -55,6 +57,13 @@ function Magazine({ id, title, price, copies, orderQty, currentIssue, onDelete, 
                     style={{ width: '80px', padding: '5px' }}
                     placeholder="Price"
                     step="0.01"
+                />
+                <input
+                    type="number"
+                    value={tempCopies}
+                    onChange={(e) => setTempCopies(e.target.value)}
+                    style={{ width: '80px', padding: '5px' }}
+                    placeholder="Copies"
                 />
                 <input
                     type="number"
@@ -109,6 +118,7 @@ function Magazine({ id, title, price, copies, orderQty, currentIssue, onDelete, 
                 <h3 style={{ margin: '0 0 5px 0', color: '#333' }}>📰 {title}</h3>
                 <p style={{ margin: '3px 0', color: '#555' }}>
                     <strong>Price:</strong> ${Number(price).toFixed(2)} |
+                    <strong> Copies:</strong> {copies !== undefined ? copies : 0} |
                     <strong> Order Qty:</strong> {orderQty} |
                     <strong> Issue:</strong> {formatIssueDate(currentIssue).replace('T', ' ')}
                 </p>

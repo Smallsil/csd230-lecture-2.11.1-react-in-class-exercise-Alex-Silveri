@@ -2,6 +2,7 @@ package csd230.bookstore.controllers;
 
 import csd230.bookstore.entities.LipstickEntity;
 import csd230.bookstore.repositories.LipstickRepository;
+import csd230.bookstore.repositories.CartRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,22 +10,22 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/rest/lipsticks")
-@CrossOrigin(origins = "http://localhost:5173") // Allow Vite React App
+@CrossOrigin(origins = "http://localhost:5173")
 public class LipstickController {
 
     private final LipstickRepository lipstickRepository;
+    private final CartRepository cartRepository;
 
-    public LipstickController(LipstickRepository lipstickRepository) {
+    public LipstickController(LipstickRepository lipstickRepository, CartRepository cartRepository) {
         this.lipstickRepository = lipstickRepository;
+        this.cartRepository = cartRepository;
     }
 
-    // GET all lipsticks
     @GetMapping
     public List<LipstickEntity> getAllLipsticks() {
         return lipstickRepository.findAll();
     }
 
-    // GET single lipstick
     @GetMapping("/{id}")
     public ResponseEntity<LipstickEntity> getLipstickById(@PathVariable Long id) {
         return lipstickRepository.findById(id)
@@ -32,13 +33,16 @@ public class LipstickController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // POST create lipstick
     @PostMapping
-    public LipstickEntity createLipstick(@RequestBody LipstickEntity lipstick) {
-        return lipstickRepository.save(lipstick);
+    public ResponseEntity<LipstickEntity> createLipstick(@RequestBody LipstickEntity lipstick) {
+        try {
+            LipstickEntity saved = lipstickRepository.save(lipstick);
+            return ResponseEntity.ok(saved);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
-    // PUT update lipstick
     @PutMapping("/{id}")
     public ResponseEntity<LipstickEntity> updateLipstick(@PathVariable Long id, @RequestBody LipstickEntity lipstickDetails) {
         return lipstickRepository.findById(id).map(lipstick -> {
@@ -51,10 +55,13 @@ public class LipstickController {
         }).orElse(ResponseEntity.notFound().build());
     }
 
-    // DELETE lipstick
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteLipstick(@PathVariable Long id) {
         if (lipstickRepository.existsById(id)) {
+            cartRepository.findAll().forEach(cart -> {
+                cart.removeProduct(id);
+                cartRepository.save(cart);
+            });
             lipstickRepository.deleteById(id);
             return ResponseEntity.ok().build();
         }

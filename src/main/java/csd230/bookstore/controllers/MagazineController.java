@@ -2,6 +2,7 @@ package csd230.bookstore.controllers;
 
 import csd230.bookstore.entities.MagazineEntity;
 import csd230.bookstore.repositories.MagazineRepository;
+import csd230.bookstore.repositories.CartRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,9 +14,11 @@ import java.util.List;
 public class MagazineController {
 
     private final MagazineRepository magazineRepository;
+    private final CartRepository cartRepository;
 
-    public MagazineController(MagazineRepository magazineRepository) {
+    public MagazineController(MagazineRepository magazineRepository, CartRepository cartRepository) {
         this.magazineRepository = magazineRepository;
+        this.cartRepository = cartRepository;
     }
 
     @GetMapping
@@ -31,8 +34,13 @@ public class MagazineController {
     }
 
     @PostMapping
-    public MagazineEntity createMagazine(@RequestBody MagazineEntity magazine) {
-        return magazineRepository.save(magazine);
+    public ResponseEntity<MagazineEntity> createMagazine(@RequestBody MagazineEntity magazine) {
+        try {
+            MagazineEntity saved = magazineRepository.save(magazine);
+            return ResponseEntity.ok(saved);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @PutMapping("/{id}")
@@ -50,6 +58,10 @@ public class MagazineController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteMagazine(@PathVariable Long id) {
         if (magazineRepository.existsById(id)) {
+            cartRepository.findAll().forEach(cart -> {
+                cart.removeProduct(id);
+                cartRepository.save(cart);
+            });
             magazineRepository.deleteById(id);
             return ResponseEntity.ok().build();
         }

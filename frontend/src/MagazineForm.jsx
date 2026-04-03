@@ -25,11 +25,10 @@ function MagazineForm({ onMagazineAdded }) {
             currentIssue: currentIssue ? currentIssue + ":00" : null
         };
 
-        api.post('/api/magazines', newMagazine)
+        api.post('/api/rest/magazines', newMagazine)
             .then(response => {
                 alert("Magazine Saved!");
                 onMagazineAdded(response.data);
-                // Clear the form
                 setTitle('');
                 setPrice(0);
                 setCopies(1);

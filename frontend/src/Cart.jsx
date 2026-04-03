@@ -10,10 +10,10 @@ function Cart({ api, onCartChange }) {
 
     const loadCart = async () => {
         try {
-            const response = await api.get('/api/cart');
+            const response = await api.get('/api/rest/cart');  // FIXED
             setCart(response.data);
             if (onCartChange) {
-                onCartChange(response.data.products.length);
+                onCartChange(response.data.products?.length || 0);
             }
         } catch (err) {
             console.error("Error loading cart:", err);
@@ -24,7 +24,7 @@ function Cart({ api, onCartChange }) {
 
     const handleRemoveItem = async (productId) => {
         try {
-            await api.delete(`/api/cart/remove/${productId}`);
+            await api.delete(`/api/rest/cart/remove/${productId}`);  // FIXED
             await loadCart();
             alert("Item removed from cart!");
         } catch (err) {
@@ -35,7 +35,7 @@ function Cart({ api, onCartChange }) {
     const handleClearCart = async () => {
         if (!window.confirm("Clear entire cart?")) return;
         try {
-            await api.delete('/api/cart/clear');
+            await api.delete('/api/rest/cart/clear');  // FIXED
             await loadCart();
             alert("Cart cleared!");
         } catch (err) {

@@ -11,9 +11,8 @@ public class BookEntity extends PublicationEntity {
 
     public BookEntity() {}
 
-    // Force Jackson to use the empty constructor + setters
     @JsonIgnore
-    public BookEntity(String t, double p, int c, String a) {
+    public BookEntity(String t, Double p, Integer c, String a) {
         super(t, p, c);
         this.author = a;
     }
@@ -26,4 +25,3 @@ public class BookEntity extends PublicationEntity {
         return "Book{author='" + author + "', " + super.toString() + "}";
     }
 }
-
