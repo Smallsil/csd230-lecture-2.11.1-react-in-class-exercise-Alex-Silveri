@@ -1,67 +1,282 @@
-#root {
-  max-width: 1280px;
+/* ========== GLOBAL STYLES ========== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+}
+
+.app-container {
+  max-width: 1000px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 20px;
+}
+
+/* ========== NAVBAR ========== */
+.navbar {
+  background: white;
+  border-radius: 16px;
+  padding: 16px 24px;
+  margin-bottom: 32px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+
+.navbar a {
+  text-decoration: none;
+  color: #4a5568;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.navbar a:hover {
+  background: #667eea;
+  color: white;
+  transform: translateY(-2px);
+}
+
+/* ========== PAGE HEADERS ========== */
+h1 {
+  font-size: 2rem;
+  margin-bottom: 24px;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+/* ========== INVENTORY CARDS ========== */
+.book-list, .magazine-list, .lipstick-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.book-row, .magazine-row, .lipstick-row {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.book-row:hover, .magazine-row:hover, .lipstick-row:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
-.card {
-  padding: 2em;
+/* Colored borders */
+.book-row { border-left: 6px solid #007bff; }
+.magazine-row { border-left: 6px solid #17a2b8; }
+.lipstick-row { border-left: 6px solid #d43f7a; }
+
+/* Card content layout */
+.book-row, .magazine-row, .lipstick-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
 }
 
-.read-the-docs {
-  color: #888;
+.book-info, .magazine-info, .lipstick-info {
+  text-align: left;
+  flex: 2;
 }
-/* Ensure all text in book rows is dark and visible */
-.book-row h3 {
-  color: #1a1a1a !important;
+
+.book-info h3, .magazine-info h3, .lipstick-info h3 {
+  font-size: 1.2rem;
+  color: #2d3748;
+  margin-bottom: 5px;
+}
+
+.book-info p, .magazine-info p, .lipstick-info p {
+  color: #718096;
+  font-size: 0.9rem;
+}
+
+/* Buttons */
+.book-actions, .magazine-actions, .lipstick-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+button {
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.85rem;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  filter: brightness(105%);
+}
+
+/* Button colors */
+button:first-child { background: #28a745; color: white; }  /* Add to Cart */
+button:nth-child(2) { background: #ffc107; color: #2d3748; }  /* Edit */
+button:last-child { background: #dc3545; color: white; }  /* Delete */
+
+/* ========== FORMS ========== */
+form {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 32px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+form h3 {
+  margin-bottom: 20px;
+  color: #2d3748;
+  font-size: 1.3rem;
+  text-align: center;
+}
+
+form > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+form input {
+  padding: 10px 14px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  background: #f7fafc;
+}
+
+form input:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+form button[type="submit"] {
+  background: #28a745;
+  color: white;
+  padding: 10px 20px;
+}
+
+/* ========== CART PAGE ========== */
+.cart-container {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  text-align: center;
+}
+
+.cart-item {
+  border-bottom: 1px solid #e2e8f0;
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  text-align: left;
+}
+
+.cart-item:last-child {
+  border-bottom: none;
+}
+
+.cart-total {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 2px solid #e2e8f0;
+  text-align: right;
+  font-weight: bold;
   font-size: 1.2rem;
 }
 
-.book-row p {
-  color: #333333 !important;
+/* ========== EMPTY STATE ========== */
+.empty-state, .cart-empty {
+  text-align: center;
+  padding: 40px;
+  background: white;
+  border-radius: 16px;
+  color: #718096;
 }
 
-.book-row strong {
-  color: #1a1a1a !important;
+/* ========== LOADING ========== */
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: white;
+  font-size: 1.2rem;
 }
 
-/* Better contrast for the edit button */
-.book-actions button:first-child {
-  color: #1a1a1a !important;
-  background-color: #ffc107 !important;
+/* ========== LOGIN PAGE ========== */
+.login-container {
+  background: white;
+  border-radius: 16px;
+  padding: 40px;
+  max-width: 400px;
+  margin: 0 auto;
+  text-align: center;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
-/* Better contrast for the delete button */
-.book-actions button:last-child {
-  color: #ffffff !important;
-  background-color: #dc3545 !important;
+.login-container h1 {
+  color: #2d3748;
+  text-shadow: none;
+  margin-bottom: 8px;
+}
+
+.login-container h2 {
+  color: #718096;
+  font-size: 1.1rem;
+  margin-bottom: 24px;
+  font-weight: normal;
+}
+
+.login-container input {
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.login-container button {
+  width: 100%;
+  background: #667eea;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 700px) {
+  .book-row, .magazine-row, .lipstick-row {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .book-info, .magazine-info, .lipstick-info {
+    text-align: center;
+  }
+
+  .book-actions, .magazine-actions, .lipstick-actions {
+    justify-content: center;
+  }
+
+  .navbar {
+    flex-direction: column;
+  }
+
+  form input {
+    width: 100% !important;
+  }
 }
