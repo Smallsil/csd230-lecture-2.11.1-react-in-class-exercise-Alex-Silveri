@@ -58,6 +58,11 @@ const Login = () => {
                 </div>
             )}
 
+            {/* Simple admin password message */}
+            <p style={{ color: "#666", fontSize: "14px", marginBottom: "15px" }}>
+                Admin password: <strong>admin123</strong>
+            </p>
+
             {/* Error Message Display */}
             {error && (
                 <p style={{
@@ -119,5 +124,3 @@ const Login = () => {
 };
 
 export default Login;
-
-
